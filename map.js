@@ -1,4 +1,15 @@
 var URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQny4aobPl0WBH4qnx8jQSmaBQp_hpldR998M9Ojkf_t2TFGHkkhH-zt3hhnpH65RV8QNDSPZC5YpFd/pub?gid=879140185&single=true&output=csv'
+Array.prototype.contains = function (obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+};
+
+var all_options = {};
 
 d3.csv(URL, function (error, data) {
     //1. load data and throw error if there is one
@@ -9,14 +20,18 @@ d3.csv(URL, function (error, data) {
     //default to location - declare variables, reset_data and draw charts
     var search_opt = 'type';
     var options_list = [];
-    var all_options = true;
 
+    data.columns.forEach(function (c) {
+        all_options[c] = [];
+    });
+
+    console.log(all_options);
 
     function generate_id() {
         //charcodes - 0-9 are 48-57, A-Z are 65-90
     }
 
-    function draw_list(search_opt, options_list, all_options) {
+    function draw_list(search_opt, options_list) {
         //dynamically draws the list_radio checkboxes
         //1. Set the list title and sort the options_list
         document.getElementById('list_title').innerHTML = search_opt.toUpperCase() + " <i>(Cliquez pour filtrer)</i>";
@@ -27,22 +42,37 @@ d3.csv(URL, function (error, data) {
         radio_string = "";
         for (i = 0; i < options_list.length; i++) {
             radio_string += "<br><input type='checkbox' id='" + options_list[i];
-            radio_string += "' name='options' value='" + options_list[i];
+            radio_string += "' name='" + search_opt + "' value='" + options_list[i];
             radio_string += "'><label for='" + options_list[i] + "'>" + options_list[i];
             radio_string += "</label><br>";
         }
-        document.getElementById('list_radio').innerHTML = radio_string;
-
+        $("#list_radio").html(radio_string);
         //set the on_change event to redraw charts whenever a checkbox option is selected
-        d3.selectAll('input[name="options"]')
+        $('input[name="' + search_opt + '"]').change(function (e) {
+            console.log($(this));
+            var name = $(this)[0].name;
+            var option = $(this)[0].value;
+            if (all_options[name].contains(option)) {
+                // Supprimer du filtre
+                var index = all_options[name].indexOf(option);
+                all_options[name].splice(index, 1);
+            } else {
+                all_options[name].push(option);
+            }
+
+            selectedBars();
+        });
+
+        /*d3.selectAll('input[name="options"]')
             .on('change', function () {
                 //return a list of 'selected' checkboxes or none if there are none
                 all_options = options_selected();
                 //redraw charts according to selections
-                new_draw_map(data, options_list, search_opt, all_options)
+                //new_draw_map(data, options_list, search_opt, all_options)
+
 
             })
-
+*/
     }
 
     function reset_data() {
@@ -91,7 +121,7 @@ d3.csv(URL, function (error, data) {
     function draw_charts() {
         //draws the charts (functions in effective_plots.js)
         draw_list(search_opt, options_list);
-        new_draw_map(data, options_list, search_opt)
+
     }
 
 
@@ -107,6 +137,7 @@ d3.csv(URL, function (error, data) {
 
     reset_data();
     draw_charts();
+    new_draw_map(data, options_list, search_opt)
 
 
     function apply_filters(data, search_opt, filter_by) {
@@ -155,15 +186,15 @@ d3.csv(URL, function (error, data) {
 
         // Create the Google Map w/o poi
         var map = new google.maps.Map(d3.select("#map").node(), {
-            zoom: 1,
-            center: new google.maps.LatLng(-25.363, 131.044),
+            zoom: 14,
+            center: new google.maps.LatLng(45.7642037, 4.8376517),
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             styles: [
-                {featureType: 'poi', stylers: [{ visibility: "off" }]}]
+                {featureType: 'poi', stylers: [{visibility: "off"}]}]
         });
 
 
-        map.fitBounds(bound);
+        //map.fitBounds(bound);
 
         var overlay = new google.maps.OverlayView();
 
@@ -176,7 +207,7 @@ d3.csv(URL, function (error, data) {
             // We could use a single SVG, but what size would it have?
             overlay.draw = function () {
                 var projection = this.getProjection(),
-                    padding = 10;
+                    padding = 5;
 
 
                 var tooltip = d3.select("body")
@@ -214,7 +245,7 @@ d3.csv(URL, function (error, data) {
 
 
                     })
-                    .on("click", function(){
+                    .on("click", function () {
 
                     });
 
@@ -231,6 +262,44 @@ d3.csv(URL, function (error, data) {
         // Bind our overlay to the map
         overlay.setMap(map);
 
+
+    }
+
+    function selectedBars() {
+        console.log(all_options);
+
+        var nnofilter = 0;
+        var ncrit = 0;
+        $.each(all_options, function (k, v) {
+            if (all_options[k].length === 0) {
+                nnofilter += 1;
+            }
+            ncrit += 1;
+        });
+        var nfilter = ncrit - nnofilter;
+        console.log(ncrit, nnofilter, nfilter);
+        d3.selectAll("circle")
+            .each(function (d) {
+                var self = this;
+                //console.log(d);
+                if (nfilter === 0){
+                    d3.select(self).transition().duration(1000).attr("r", 4);
+                } else {
+                    var nmatch = 0;
+                    $.each(all_options, function (k, v) {
+                        if (all_options[k].contains(d[k])) {
+                            nmatch += 1;
+                        }
+                    });
+                    if (nmatch === nfilter){
+                        d3.select(self).transition().duration(1000).attr("r", 10);
+                    } else if (nmatch === 1) {
+                        d3.select(self).transition().duration(1000).attr("r", 1);
+                    } else {
+                        d3.select(self).transition().duration(1000).attr("r", 1);
+                    }
+                }
+            });
 
     }
 
