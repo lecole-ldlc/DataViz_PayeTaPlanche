@@ -18,64 +18,72 @@ d3.csv(URL, function (error, data) {
     //2. define reset and draw functions
 
     //default to location - declare variables, reset_data and draw charts
-    var search_opt = 'type';
+    var label = {type: "Type", arrond: "Arrondissement", prixyelp: "Prix"};
+    var search_opt = ['type', 'arrond', 'prixyelp'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
         all_options[c] = [];
     });
 
-    console.log(all_options);
+    options_list = {};
+    search_opt.forEach(function(d){
+        options_list[d] = d3.nest()
+            .key(function(a){
+                return a[d];
+            })
+            .entries(data)
+            .map(function(a){return a.key})
 
-    function generate_id() {
-        //charcodes - 0-9 are 48-57, A-Z are 65-90
-    }
+    });
+    console.log(options_list);
 
-    function draw_list(search_opt, options_list) {
-        //dynamically draws the list_radio checkboxes
-        //1. Set the list title and sort the options_list
-        document.getElementById('list_title').innerHTML = search_opt.toUpperCase() + " <i>(Cliquez pour filtrer)</i>";
-        options_list.sort();
+    function draw_list(search_opt) {
 
-        //2. get distinct values of search_opt from data
-        //dynamically create radio button with none selected
-        radio_string = "";
-        for (i = 0; i < options_list.length; i++) {
-            radio_string += "<br><input type='checkbox' id='" + options_list[i];
-            radio_string += "' name='" + search_opt + "' value='" + options_list[i];
-            radio_string += "'><label for='" + options_list[i] + "'>" + options_list[i];
-            radio_string += "</label><br>";
-        }
-        $("#list_radio").html(radio_string);
-        //set the on_change event to redraw charts whenever a checkbox option is selected
-        $('input[name="' + search_opt + '"]').change(function (e) {
-            console.log($(this));
-            var name = $(this)[0].name;
-            var option = $(this)[0].value;
-            if (all_options[name].contains(option)) {
-                // Supprimer du filtre
-                var index = all_options[name].indexOf(option);
-                all_options[name].splice(index, 1);
-            } else {
-                all_options[name].push(option);
+
+        search_opt.forEach(function (o,i) {
+            var titleListe = '<div class="card">';
+            titleListe += '<div class="card-header" role="tab" id="heading'+ i +'">';
+            titleListe += '<h5 class="mb-0">';
+            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse'+ i +'" aria-expanded="false" aria-controls="collapse'+ i +'">' + label[o] + '</a></h5></div>';
+            titleListe += '<div id="collapse'+ i +'" class="collapse" role="tabpanel" aria-labelledby="heading'+ i +'" data-parent="#accordion">';
+            titleListe += '<div id="contentlist'+ i +'" class="card-body"></div></div></div>';
+            $("#accordion").append(titleListe)
+
+            all_options[o].sort();
+
+            var radio_string = "";
+            for (var j = 0; j < options_list[o].length; j++) {
+                radio_string += "<br><input type='checkbox' id='" + options_list[o][j];
+                radio_string += "' name='" + o + "' value='" + options_list[o][j];
+                radio_string += "'><label for='" + options_list[o][j] + "'>" + options_list[o][j];
+                radio_string += "</label><br>";
             }
+            var contentlist = '#contentlist'+ i;
+            $(contentlist).html(radio_string);
+            //set the on_change event to redraw charts whenever a checkbox option is selected
+            $('input[name="' + o + '"]').change(function (e) {
+                console.log($(this));
+                var name = $(this)[0].name;
+                var option = $(this)[0].value;
 
-            selectedBars();
+                if (all_options[name].contains(option)) {
+                    // Supprimer du filtre
+                    var index = all_options[name].indexOf(option);
+                    all_options[name].splice(index, 1);
+                } else {
+                    all_options[name].push(option);
+                }
+
+                selectedBars();
+            });
+
         });
 
-        /*d3.selectAll('input[name="options"]')
-            .on('change', function () {
-                //return a list of 'selected' checkboxes or none if there are none
-                all_options = options_selected();
-                //redraw charts according to selections
-                //new_draw_map(data, options_list, search_opt, all_options)
 
-
-            })
-*/
     }
 
-    function reset_data() {
+    /*function reset_data() {
         //creates a set of distinct 'option' values dependent on search_opt
         //used to populate list_radio
         var options_set = d3.set();
@@ -87,7 +95,7 @@ d3.csv(URL, function (error, data) {
             options_set.add(my_val);
         });
         options_list = options_set.values()
-    }
+    }*/
 
     function check_length(my_val, len_no) {
 
@@ -99,24 +107,24 @@ d3.csv(URL, function (error, data) {
         return my_val;
     }
 
-    function options_selected() {
+    /*    function options_selected() {
 
-        //looks at dynamically drawn options and adds any 'checked' values to the list
-        var checked = document.querySelectorAll('input[name="options"]:checked');
-        checked = Array.prototype.slice.call(checked);
-        my_list = [];
+            //looks at dynamically drawn options and adds any 'checked' values to the list
+            var checked = document.querySelectorAll('input[name="options"]:checked');
+            checked = Array.prototype.slice.call(checked);
+            my_list = [];
 
-        if (checked.length === 0) {
-            // there are no checked checkboxes
-        } else {
-            // there are some checked checkboxes
-            checked.forEach(function (d) {
-                my_list.push(d.id)
-            })
-        }
-        return my_list;
+            if (checked.length === 0) {
+                // there are no checked checkboxes
+            } else {
+                // there are some checked checkboxes
+                checked.forEach(function (d) {
+                    my_list.push(d.id)
+                })
+            }
+            return my_list;
 
-    }
+        }*/
 
     function draw_charts() {
         //draws the charts (functions in effective_plots.js)
@@ -131,13 +139,13 @@ d3.csv(URL, function (error, data) {
             //reset the global var search_opt
             search_opt = document.querySelector('input[name="search_option"]:checked').value;
             //reset data and draw charts
-            reset_data();
+            //reset_data();
             draw_charts()
         });
 
-    reset_data();
+    //reset_data();
     draw_charts();
-    new_draw_map(data, options_list, search_opt)
+    new_draw_map(data, options_list, search_opt);
 
 
     function apply_filters(data, search_opt, filter_by) {
@@ -282,16 +290,16 @@ d3.csv(URL, function (error, data) {
             .each(function (d) {
                 var self = this;
                 //console.log(d);
-                if (nfilter === 0){
+                if (nfilter === 0) {
                     d3.select(self).transition().duration(1000).attr("r", 4);
                 } else {
                     var nmatch = 0;
-                    $.each(all_options, function (k, v) {
+                    $.each(all_options, function (k) {
                         if (all_options[k].contains(d[k])) {
                             nmatch += 1;
                         }
                     });
-                    if (nmatch === nfilter){
+                    if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
                     } else if (nmatch === 1) {
                         d3.select(self).transition().duration(1000).attr("r", 1);
