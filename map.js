@@ -18,8 +18,8 @@ d3.csv(URL, function (error, data) {
     //2. define reset and draw functions
 
     //default to location - declare variables, reset_data and draw charts
-    var label = {type: "Type", arrond: "Arrondissement", prixyelp: "Prix"};
-    var search_opt = ['type', 'arrond', 'prixyelp'];
+    var label = {type: "Type", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
+    var search_opt = ['type', 'arrond', 'prixyelp','noteyelp'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
@@ -34,7 +34,7 @@ d3.csv(URL, function (error, data) {
             })
             .entries(data)
             .map(function(a){return a.key})
-
+        options_list[d].sort()
     });
     console.log(options_list);
 
