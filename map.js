@@ -10,6 +10,8 @@ Array.prototype.contains = function (obj) {
 };
 
 var all_options = {};
+var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
+
 
 d3.csv(URL, function (error, data) {
     //1. load data and throw error if there is one
@@ -19,7 +21,9 @@ d3.csv(URL, function (error, data) {
 
     //default to location - declare variables, reset_data and draw charts
     var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
-    var search_opt = ['type', 'arrond', 'prixyelp','noteyelp'];
+    var label_classes = {type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success"};
+    var label_short = {type: "Type", arrond: "Arr.", prixyelp: "Prix", noteyelp: "Yelp"};
+    var search_opt = ['type', 'arrond', 'prixyelp', 'noteyelp'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
@@ -27,13 +31,15 @@ d3.csv(URL, function (error, data) {
     });
 
     options_list = {};
-    search_opt.forEach(function(d){
+    search_opt.forEach(function (d) {
         options_list[d] = d3.nest()
-            .key(function(a){
+            .key(function (a) {
                 return a[d];
             })
             .entries(data)
-            .map(function(a){return a.key});
+            .map(function (a) {
+                return a.key
+            });
         options_list[d].sort()
     });
     console.log(options_list);
@@ -41,29 +47,29 @@ d3.csv(URL, function (error, data) {
     function draw_list(search_opt) {
 
 
-        search_opt.forEach(function (o,i) {
+        search_opt.forEach(function (o, i) {
             var titleListe = '<div class="card">';
-            titleListe += '<div class="card-header" role="tab" id="heading'+ i +'">';
+            titleListe += '<div class="card-header" role="tab" id="heading' + i + '">';
             titleListe += '<h5 class="mb-0">';
-            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse'+ i +'" aria-expanded="false" aria-controls="collapse'+ i +'">' + label[o] + '</a></h5></div>';
-            titleListe += '<div id="collapse'+ i +'" class="collapse';
-            if (i===0){
+            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">' + label[o] + '</a> <a href="#" class="colorize" data-filter="' + o + '">F</a></h5></div>';
+            titleListe += '<div id="collapse' + i + '" class="collapse';
+            if (i === 0) {
                 titleListe += ' show'
             }
-            titleListe +='" role="tabpanel" aria-labelledby="heading'+ i +'" data-parent="#accordion">';
-            titleListe += '<div id="contentlist'+ i +'" class="card-body"></div></div></div>';
+            titleListe += '" role="tabpanel" aria-labelledby="heading' + i + '" data-parent="#accordion">';
+            titleListe += '<div id="contentlist' + i + '" class="card-body"></div></div></div>';
             $("#accordion").append(titleListe);
 
             all_options[o].sort();
 
             var radio_string = "";
             for (var j = 0; j < options_list[o].length; j++) {
-                radio_string += "<br><input type='checkbox' id='" + options_list[o][j];
+                radio_string += "<label class='custom-control custom-checkbox' for='" + options_list[o][j] + "'><input type='checkbox' class='custom-control-input' id='" + options_list[o][j];
                 radio_string += "' name='" + o + "' value='" + options_list[o][j];
-                radio_string += "'><label for='" + options_list[o][j] + "'>" + options_list[o][j];
-                radio_string += "</label><br>";
+                radio_string += "'><span class='custom-control-indicator'></span><span class='custom-control-description'>" + options_list[o][j];
+                radio_string += "</span></label><br>";
             }
-            var contentlist = '#contentlist'+ i;
+            var contentlist = '#contentlist' + i;
             $(contentlist).html(radio_string);
             //set the on_change event to redraw charts whenever a checkbox option is selected
             $('input[name="' + o + '"]').change(function () {
@@ -80,6 +86,11 @@ d3.csv(URL, function (error, data) {
                 }
 
                 selectedBars();
+            });
+
+            $(".colorize").click(function (e) {
+                var key = $(this).attr("data-filter");
+                colorizeBars(key);
             });
 
         });
@@ -136,16 +147,6 @@ d3.csv(URL, function (error, data) {
 
     }
 
-
-    //set on_change event for search option
-    d3.selectAll('input[name="search_option"]')
-        .on('change', function () {
-            //reset the global var search_opt
-            search_opt = document.querySelector('input[name="search_option"]:checked').value;
-            //reset data and draw charts
-            //reset_data();
-            draw_charts()
-        });
 
     //reset_data();
     draw_charts();
@@ -242,6 +243,7 @@ d3.csv(URL, function (error, data) {
                     .attr("r", 4)
                     .attr("cx", padding + 5)
                     .attr("cy", padding + 5)
+                    .style("stroke", "none")
                     .on("mouseover", function (d) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
@@ -262,7 +264,7 @@ d3.csv(URL, function (error, data) {
                     })
                     .on("click", function (d) {
 
-                        $('#infosBar').html("Nom: " + d.nom + "<br>Adresse: <a target='_blank' href='https://www.google.fr/maps/place/"+ encodeURI(d.adresse) +"'>" + d.adresse + "</a><br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp)
+                        $('#infosBar').html("Nom: " + d.nom + '<br>Adresse: <a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '">' + d.adresse + "</a><br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp)
 
                     });
 
@@ -282,19 +284,45 @@ d3.csv(URL, function (error, data) {
 
     }
 
+
     function selectedBars() {
-        console.log(all_options);
+
 
         var nnofilter = 0;
         var ncrit = 0;
+        var filters = [];
         $.each(all_options, function (k, v) {
             if (all_options[k].length === 0) {
                 nnofilter += 1;
+            } else {
+                filters.push({list: all_options[k], key: k});
             }
             ncrit += 1;
         });
+        console.log(filters);
         var nfilter = ncrit - nnofilter;
         console.log(ncrit, nnofilter, nfilter);
+        if (nfilter == 0) {
+            $("#filterList").html('');
+        } else {
+            var fstring = "";
+            filters.forEach(function (e) {
+                e.list.forEach(function (e2) {
+                    fstring += '<span class="badge badge-' + label_classes[e.key] + ' filter_label" data-name="' + e.key + '" data-option="' + e2 + '">' + e2 + ' </span>';
+                })
+
+            });
+
+            $("#filterList").html(fstring);
+            $(".filter_label").click(function (e){
+                var name = $(this).attr("data-name");
+                var option = $(this).attr("data-option");
+                console.log(name, option);
+                removeFilter(name, option);
+                $("#"+option).prop('checked', false);
+            });
+        }
+
         d3.selectAll("circle")
             .each(function (d) {
                 var self = this;
@@ -311,11 +339,34 @@ d3.csv(URL, function (error, data) {
                     if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
                     } else if (nmatch === 1) {
-                        d3.select(self).transition().duration(1000).attr("r", 1);
+                        d3.select(self).transition().duration(1000).attr("r", 4);
                     } else {
-                        d3.select(self).transition().duration(1000).attr("r", 1);
+                        d3.select(self).transition().duration(1000).attr("r", 2);
                     }
                 }
+            });
+
+    }
+
+    function removeFilter(name, option) {
+
+        if (all_options[name].contains(option)) {
+            // Supprimer du filtre
+            var index = all_options[name].indexOf(option);
+            all_options[name].splice(index, 1);
+        } else {
+            all_options[name].push(option);
+        }
+
+        selectedBars();
+    }
+
+    function colorizeBars(key) {
+
+        d3.selectAll("circle")
+            .each(function (d) {
+                var self = this;
+                d3.select(self).transition().duration(1000).style("fill", color_scale(d[key]));
             });
 
     }
