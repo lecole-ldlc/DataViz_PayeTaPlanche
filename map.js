@@ -18,7 +18,7 @@ d3.csv(URL, function (error, data) {
     //2. define reset and draw functions
 
     //default to location - declare variables, reset_data and draw charts
-    var label = {type: "Type", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
+    var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
     var search_opt = ['type', 'arrond', 'prixyelp','noteyelp'];
     var options_list = [];
 
@@ -46,7 +46,11 @@ d3.csv(URL, function (error, data) {
             titleListe += '<div class="card-header" role="tab" id="heading'+ i +'">';
             titleListe += '<h5 class="mb-0">';
             titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse'+ i +'" aria-expanded="false" aria-controls="collapse'+ i +'">' + label[o] + '</a></h5></div>';
-            titleListe += '<div id="collapse'+ i +'" class="collapse" role="tabpanel" aria-labelledby="heading'+ i +'" data-parent="#accordion">';
+            titleListe += '<div id="collapse'+ i +'" class="collapse';
+            if (i===0){
+                titleListe += ' show'
+            }
+            titleListe +='" role="tabpanel" aria-labelledby="heading'+ i +'" data-parent="#accordion">';
             titleListe += '<div id="contentlist'+ i +'" class="card-body"></div></div></div>';
             $("#accordion").append(titleListe);
 
@@ -241,7 +245,7 @@ d3.csv(URL, function (error, data) {
                     .on("mouseover", function (d) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
-                        t_text = "Nom: " + d.nom + "<br>Adresse: " + d.adresse + "<br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp
+                        t_text = "Nom: " + d.nom + "<br>Adresse: " + d.adresse + "<br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp;
                         tooltip.html(t_text);
                         d3.select(this).style("cursor", "pointer");
                         tooltip.style("visibility", "visible");
@@ -251,11 +255,14 @@ d3.csv(URL, function (error, data) {
 
                     })
                     .on("mouseout", function () {
+                        tooltip.style("visibility", "hidden");
                         d3.select(this).style("cursor", "default");
 
 
                     })
-                    .on("click", function () {
+                    .on("click", function (d) {
+
+                        $('#infosBar').html("Nom: " + d.nom + "<br>Adresse: <a target='_blank' href='https://www.google.fr/maps/place/"+ encodeURI(d.adresse) +"'>" + d.adresse + "</a><br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp)
 
                     });
 
