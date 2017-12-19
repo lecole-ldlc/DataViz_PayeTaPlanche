@@ -28,8 +28,8 @@ border: none;
 
 
 #map {
-  width: 900px;
-  height: 600px;
+  width: 100%;
+  height: 80vh;
   margin: 0;
   padding: 0;
 }
@@ -237,4 +237,9 @@ input[name="options"]:checked + label {
 
 *, ::after, ::before {
     box-sizing: content-box;
+}
+
+.card-body {
+    overflow-y:scroll;
+    height:150px;
 }

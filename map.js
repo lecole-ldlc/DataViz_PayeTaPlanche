@@ -33,7 +33,7 @@ d3.csv(URL, function (error, data) {
                 return a[d];
             })
             .entries(data)
-            .map(function(a){return a.key})
+            .map(function(a){return a.key});
         options_list[d].sort()
     });
     console.log(options_list);
@@ -48,7 +48,7 @@ d3.csv(URL, function (error, data) {
             titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse'+ i +'" aria-expanded="false" aria-controls="collapse'+ i +'">' + label[o] + '</a></h5></div>';
             titleListe += '<div id="collapse'+ i +'" class="collapse" role="tabpanel" aria-labelledby="heading'+ i +'" data-parent="#accordion">';
             titleListe += '<div id="contentlist'+ i +'" class="card-body"></div></div></div>';
-            $("#accordion").append(titleListe)
+            $("#accordion").append(titleListe);
 
             all_options[o].sort();
 
@@ -62,7 +62,7 @@ d3.csv(URL, function (error, data) {
             var contentlist = '#contentlist'+ i;
             $(contentlist).html(radio_string);
             //set the on_change event to redraw charts whenever a checkbox option is selected
-            $('input[name="' + o + '"]').change(function (e) {
+            $('input[name="' + o + '"]').change(function () {
                 console.log($(this));
                 var name = $(this)[0].name;
                 var option = $(this)[0].value;
@@ -155,6 +155,8 @@ d3.csv(URL, function (error, data) {
         if (filter_by === undefined) {
             filter_by = []
         }
+
+        var my_data;
 
         if (filter_by.length > 0) {
             my_data = data.filter(function (d) {
