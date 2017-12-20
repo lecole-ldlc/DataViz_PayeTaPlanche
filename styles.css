@@ -61,6 +61,11 @@ table {
     text-align: center;
     width: 20%;
 }
+.img-fluid2 {
+  max-width: auto;
+  height: 20%;
+  text-align: center;
+}
 
 .rounded-img {
     border-radius: 50%;
@@ -117,6 +122,7 @@ table {
   -o-transform:scale(1.1); /* Opera */
   transform:scale(1.1);
 }
+
 #title-dataviz {
     background-color: #323333;
     color: white;
