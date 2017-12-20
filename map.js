@@ -12,6 +12,24 @@ Array.prototype.contains = function (obj) {
 var all_options = {};
 var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
 
+var star0 = '<div class="stars"><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star05 ='<div class="stars"><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star1 ='<div class="stars"><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star15 ='<div class="stars"><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star2 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star25 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span></div>';
+var star3 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span></div>';
+var star35 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span></div>';
+var star4 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span></div>';
+var star45 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span></div>';
+var star5 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span></div>';
+
+var prix1 ='Prix : <i class="fas fa-euro-sign"></i>';
+var prix2 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix3 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+
+
+
 
 d3.csv(URL, function (error, data) {
     //1. load data and throw error if there is one
@@ -234,8 +252,47 @@ d3.csv(URL, function (error, data) {
 
                         var infos = '<h4 class="card-title">'+ d.nom +'</h4>';
                         infos += '<h6 class="card-subtitle mb-2 text-muted">'+ d.type +'</h6>';
-                        infos += '<p class="card-text"></p>'
+                        if (d.noteyelp === "non renseigné"){
+                            infos += 'Pas de note</br>'
+                        }else if (d.noteyelp === "0"){
+                            infos += star0
+                        }else if (d.noteyelp === "0,5"){
+                            infos += star05
+                        }else if (d.noteyelp === "1"){
+                            infos += star1
+                        }else if (d.noteyelp === "1,5"){
+                            infos += star15
+                        }else if (d.noteyelp === "2"){
+                            infos += star2
+                        }else if (d.noteyelp === "2,5"){
+                            infos += star25
+                        }else if (d.noteyelp === "3"){
+                            infos += star3
+                        }else if (d.noteyelp === "3,5"){
+                            infos += star35
+                        }else if (d.noteyelp === "4"){
+                            infos += star4
+                        }else if (d.noteyelp === "4,5"){
+                            infos += star45
+                        }else if (d.noteyelp === "5"){
+                            infos += star5
+                        }
+                        if (d.prixyelp === "€"){
+                            infos += prix1 +'</br>'
+                        }else if (d.prixyelp === "€€"){
+                            infos += prix2 +'</br>'
+                        }else if (d.prixyelp === "€€"){
+                            infos += prix3 +'</br>'
+                        }else {
+                            infos += "Aucun Prix renseigné"
+                        }
+                        infos += '<p class="card-text">'+ d.adresse + '</p>';
                         infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a>';
+
+
+
+
+
                         if (d.blog !== ""){
                             infos += '<a target="_blank" href="'+ d.blog +'" class="card-link">Article du Blog</a>';
                         }

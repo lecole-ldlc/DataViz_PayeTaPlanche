@@ -255,3 +255,26 @@ table {
 .fa-paint-brush {
     font-size: .9em;
 }
+
+.star {
+    font-size: x-large;
+    display: inline-block;
+    color: gray;
+}
+.star:last-child {
+    margin-right: 0;
+}
+.star:before {
+    content: '\2605';
+}
+.star.on {
+    color: gold;
+}
+.star.half:after {
+    content: '\2605';
+    color: gold;
+    margin-left: -20px;
+    width: 10px;
+    position: absolute;
+    overflow: hidden;
+}
