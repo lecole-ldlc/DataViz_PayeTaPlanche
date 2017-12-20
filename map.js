@@ -10,7 +10,7 @@ Array.prototype.contains = function (obj) {
 };
 
 var all_options = {};
-var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
+var color_scale = d3.scaleOrdinal(d3.schemeCategory20);
 
 var star0 = '<div class="stars"><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
 var star05 ='<div class="stars"><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
