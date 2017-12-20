@@ -27,6 +27,7 @@ var star5 ='<div class="stars"><span class="star on"></span><span class="star on
 var prix1 ='Prix : <i class="fas fa-euro-sign"></i>';
 var prix2 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 var prix3 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix4 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 
 
 
@@ -281,8 +282,10 @@ d3.csv(URL, function (error, data) {
                             infos += prix1 +'</br>'
                         }else if (d.prixyelp === "€€"){
                             infos += prix2 +'</br>'
-                        }else if (d.prixyelp === "€€"){
+                        }else if (d.prixyelp === "€€€"){
                             infos += prix3 +'</br>'
+                        }else if (d.prixyelp === "€€€€"){
+                            infos += prix4 +'</br>'
                         }else {
                             infos += "Aucun Prix renseigné"
                         }
