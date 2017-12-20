@@ -1,226 +1,203 @@
 /* ALL TABLES */
 table {
-width: 100%;
-border-collapse:collapse;
-font-family: sans-serif;
-padding: 0;
-border: none;
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+    border: none;
 }
 
-#green,#red,#amber {
-  color: white;
-  padding: 12px;
-  text-align: center;
-  font-size: 20px;
-  border: none;
+#green, #red, #amber {
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 20px;
+    border: none;
 }
 
-#green{
-  background-color: #006600;
-}
-#red{
-  background-color: #cc0000;
-}
-#amber{
-  background-color: #ff9900;
+#green {
+    background-color: #006600;
 }
 
+#red {
+    background-color: #cc0000;
+}
 
+#amber {
+    background-color: #ff9900;
+}
 
 #map {
-  width: 100%;
-  height: 80vh;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    height: 80vh;
+    margin: 0;
+    padding: 0;
 }
 
 .effective, .effective svg {
-  position: absolute;
+    position: absolute;
 }
 
 .effective svg {
-  width: 20px;
-  height: 20px;
-  padding-right: 0;
-  font: 10px sans-serif;
+    width: 20px;
+    height: 20px;
+    padding-right: 0;
+    font: 10px sans-serif;
 }
 
 .effective circle {
-  fill: #DC143C;
-  stroke: grey;
-  stroke-width: 1px;
-}
-/* Colour Table and individual tds - Colour key, Row 1*/
-#colours{
-  width: 30%;
+    fill: #DC143C;
+    stroke: grey;
+    stroke-width: 1px;
 }
 
+/* Colour Table and individual tds - Colour key, Row 1*/
+#colours {
+    width: 30%;
+}
 
 /* Title Bar - Row 1, image and text*/
 .title-img {
-  background-color: #323333;
-  text-align: center;
+    background-color: #323333;
+    text-align: center;
+    width: 20%;
 }
-
-
 
 .rounded-img {
-  border-radius: 50%;
-  width: 40%;
-  background-color: #323333;
-  -webkit-transition: all 1s ease; /* Safari and Chrome */
-  -moz-transition: all 1s ease; /* Firefox */
-  -ms-transition: all 1s ease; /* IE 9 */
-  -o-transition: all 1s ease; /* Opera */
-  transition: all 1s ease;
+    border-radius: 50%;
+    width: 40%;
+    background-color: #323333;
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -ms-transition: all 1s ease; /* IE 9 */
+    -o-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
 }
+
 .rounded-img:hover {
-  -webkit-transform:scale(1.1); /* Safari and Chrome */
-  -moz-transform:scale(1.1); /* Firefox */
-  -ms-transform:scale(1.1); /* IE 9 */
-  -o-transform:scale(1.1); /* Opera */
-  transform:scale(1.1);
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
 }
 
 .rounded-img2 {
-  border-radius: 50%;
-  width: 20%;
-  background-color: #323333;
-  -webkit-transition: all 1s ease; /* Safari and Chrome */
-  -moz-transition: all 1s ease; /* Firefox */
-  -ms-transition: all 1s ease; /* IE 9 */
-  -o-transition: all 1s ease; /* Opera */
-  transition: all 1s ease;
-  padding: 1px;
+    border-radius: 50%;
+    width: 20%;
+    background-color: #323333;
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -ms-transition: all 1s ease; /* IE 9 */
+    -o-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+    padding: 1px;
 }
+
 .rounded-img2:hover {
-  -webkit-transform:scale(1.1); /* Safari and Chrome */
-  -moz-transform:scale(1.1); /* Firefox */
-  -ms-transform:scale(1.1); /* IE 9 */
-  -o-transform:scale(1.1); /* Opera */
-  transform:scale(1.1);
+    -webkit-transform: scale(1.1); /* Safari and Chrome */
+    -moz-transform: scale(1.1); /* Firefox */
+    -ms-transform: scale(1.1); /* IE 9 */
+    -o-transform: scale(1.1); /* Opera */
+    transform: scale(1.1);
 }
+
 #title-dataviz {
-  background-color: #323333;
-  color: white;
-  font-size: 35px;
-  font-weight: bold;
-  text-transform : uppercase;
-  text-align: center;
+    background-color: #323333;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
     font-family: "Lato Black", serif;
 
 }
 
 #title {
-  background-color: #323333;
-  color: white;
-  font-size: 25px;
-  text-align: center;
+    background-color: #323333;
+    color: white;
+    font-size: 25px;
+    text-align: center;
     font-family: "Lato", serif;
 }
 
 #title_img {
-  text-align: left;
-  background-color: #3d4a57;
-  padding: 4px;
+    text-align: left;
+    background-color: #3d4a57;
+    padding: 4px;
 }
 
 /* Line Chart lines, tooltips and All axes text and paths */
 
 #title_txt {
-  text-align: right;
-  padding: 14px;
+    text-align: right;
+    padding: 14px;
 }
 
-
-.tooltip_map{
-  width: auto;
-  height: auto;
-  text-align: left;
-  visibility: hidden;
-  position: absolute;
-  padding: 5px;
-  font: 10px sans-serif;
-  background: white;
-  border-radius: 4px;
+.tooltip_map {
+    width: auto;
+    height: auto;
+    text-align: left;
+    visibility: hidden;
+    position: absolute;
+    padding: 5px;
+    font: 10px sans-serif;
+    background: white;
+    border-radius: 4px;
 }
-
 
 .line {
-  fill: none;
-  stroke-width: 3px;
+    fill: none;
+    stroke-width: 3px;
 }
-
 
 .x_hbar text, .y_hbar text, .x_vbar text, .y_vbar text, .x_line text, .y_line text {
-  font-size: 14px;
-}
-
-.y_hbar path, .x_hbar path, .x_vbar path, .y_vbar path,  .x_line path, .y_line path { display: none; }
-
-/* Input Boxes */
-
-input[type=radio] {
-display:none;
-}
-
-input[name="options"] {
-    display:none;
     font-size: 14px;
 }
 
-input[name="search_option"]:checked + label {
-    color: #57bcd2; /* Couleur en cas de sélectionne colonne haut */
+.y_hbar path, .x_hbar path, .x_vbar path, .y_vbar path, .x_line path, .y_line path {
+    display: none;
 }
 
-input[name="options"]:checked + label {
-    color: #57bcd2; /* Couleur en cas de sélection colonne gauche */
-}
-
-#input{
-  padding: 10px;
-  font-size: 20px;
-}
+/* Input Boxes */
 
 /* Chart Title Tds */
 #list_title, #bar_title, #donut_title, #v_bar_title, #line_title { /* Colonne de gauche */
-  background-color: #323333;
+    background-color: #323333;
     border: 2px grey;
 }
 
 #list_title, #bar_title, #donut_title, #v_bar_title, #line_title { /* Titre colonne gauche */
-  color: white;
-  text-align: center;
-  font-weight: 500;
-  font-size: 16px;
-  padding: 10px;
-  border: 1px solid lightgrey;
+    color: white;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid lightgrey;
 }
-
 
 /* Chart  Tds */
-#option_donut, #option_vertical_bar,#option_line {
-  height: 250px;
-  vertical-align: top;
-  border: 1px solid lightgrey;
-  text-align: center;
+#option_donut, #option_vertical_bar, #option_line {
+    height: 250px;
+    vertical-align: top;
+    border: 1px solid lightgrey;
+    text-align: center;
 }
 
-#option_horizontal_bar,#list_radio{
-  height: 560px;
-  vertical-align: top;
-  border: 1px solid lightgrey;
-  text-align: center;
+#option_horizontal_bar, #list_radio {
+    height: 560px;
+    vertical-align: top;
+    border: 1px solid lightgrey;
+    text-align: center;
 }
 
-#list_radio{
-  text-align: center;
-  font-size: 16px;
-  padding: 10px;
-  width: 200px;
+#list_radio {
+    text-align: center;
+    font-size: 16px;
+    padding: 10px;
+    width: 200px;
 }
 
-.tooltip_vbar,.tooltip_hbar, .tooltip_donut{
+.tooltip_vbar, .tooltip_hbar, .tooltip_donut {
     width: auto;
     height: auto;
     visibility: hidden;
@@ -233,33 +210,48 @@ input[name="options"]:checked + label {
     pointer-events: none;
 }
 
-.tooltip_vbar{
-  text-align: left;
+.tooltip_vbar {
+    text-align: left;
 }
 
-.tooltip_donut{
-  text-align: left;
+.tooltip_donut {
+    text-align: left;
 }
 
-.tooltip_hbar{
-  text-align: center;
+.tooltip_hbar {
+    text-align: center;
 }
 
 .chart_td {
-  padding: 10px;
-  vertical-align: top;
+    vertical-align: top;
 }
 
 #option_line_td {
-  padding: 10px;
-  vertical-align: top;
+    padding: 10px;
+    vertical-align: top;
 }
 
 *, ::after, ::before {
     box-sizing: content-box;
 }
 
-.card-body {
-    overflow-y:scroll;
-    height:150px;
+.card-right {
+    overflow-y: scroll;
+    height: 150px;
+}
+
+.badge-color {
+    color: white;
+}
+
+.noselect {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.fa-paint-brush {
+    font-size: .9em;
 }

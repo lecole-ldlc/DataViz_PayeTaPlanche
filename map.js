@@ -22,7 +22,6 @@ d3.csv(URL, function (error, data) {
     //default to location - declare variables, reset_data and draw charts
     var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
     var label_classes = {type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success"};
-    var label_short = {type: "Type", arrond: "Arr.", prixyelp: "Prix", noteyelp: "Yelp"};
     var search_opt = ['type', 'arrond', 'prixyelp', 'noteyelp'];
     var options_list = [];
 
@@ -51,13 +50,13 @@ d3.csv(URL, function (error, data) {
             var titleListe = '<div class="card">';
             titleListe += '<div class="card-header" role="tab" id="heading' + i + '">';
             titleListe += '<h5 class="mb-0">';
-            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">' + label[o] + '</a> <a href="#" class="colorize" data-filter="' + o + '">F</a></h5></div>';
+            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">' + label[o] + '</a> <a href="#" class="colorize" data-filter="' + o + '"><i class="fas fa-paint-brush float-right"></i></a></h5></div>';
             titleListe += '<div id="collapse' + i + '" class="collapse';
             if (i === 0) {
                 titleListe += ' show'
             }
             titleListe += '" role="tabpanel" aria-labelledby="heading' + i + '" data-parent="#accordion">';
-            titleListe += '<div id="contentlist' + i + '" class="card-body"></div></div></div>';
+            titleListe += '<div id="contentlist' + i + '" class="card-body card-right"></div></div></div>';
             $("#accordion").append(titleListe);
 
             all_options[o].sort();
@@ -98,19 +97,6 @@ d3.csv(URL, function (error, data) {
 
     }
 
-    /*function reset_data() {
-        //creates a set of distinct 'option' values dependent on search_opt
-        //used to populate list_radio
-        var options_set = d3.set();
-        var my_val = "";
-
-        data.forEach(function (d) {
-            //if a long string, only shows the first 20 characters
-            my_val = check_length(d[search_opt], 20);
-            options_set.add(my_val);
-        });
-        options_list = options_set.values()
-    }*/
 
     function check_length(my_val, len_no) {
 
@@ -122,24 +108,6 @@ d3.csv(URL, function (error, data) {
         return my_val;
     }
 
-    /*    function options_selected() {
-
-            //looks at dynamically drawn options and adds any 'checked' values to the list
-            var checked = document.querySelectorAll('input[name="options"]:checked');
-            checked = Array.prototype.slice.call(checked);
-            my_list = [];
-
-            if (checked.length === 0) {
-                // there are no checked checkboxes
-            } else {
-                // there are some checked checkboxes
-                checked.forEach(function (d) {
-                    my_list.push(d.id)
-                })
-            }
-            return my_list;
-
-        }*/
 
     function draw_charts() {
         //draws the charts (functions in effective_plots.js)
@@ -247,7 +215,7 @@ d3.csv(URL, function (error, data) {
                     .on("mouseover", function (d) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
-                        t_text = "Nom: " + d.nom + "<br>Adresse: " + d.adresse + "<br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp;
+                        t_text = d.nom ;
                         tooltip.html(t_text);
                         d3.select(this).style("cursor", "pointer");
                         tooltip.style("visibility", "visible");
@@ -264,7 +232,15 @@ d3.csv(URL, function (error, data) {
                     })
                     .on("click", function (d) {
 
-                        $('#infosBar').html("Nom: " + d.nom + '<br>Adresse: <a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '">' + d.adresse + "</a><br>Type: " + d.type + "<br>Terrasse: " + d.terrasse + "<br>Note Yelp: " + d.noteyelp + "<br>Prix Yelp: " + d.prixyelp)
+                        var infos = '<h4 class="card-title">'+ d.nom +'</h4>';
+                        infos += '<h6 class="card-subtitle mb-2 text-muted">'+ d.type +'</h6>';
+                        infos += '<p class="card-text"></p>'
+                        infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a>';
+                        if (d.blog !== ""){
+                            infos += '<a target="_blank" href="'+ d.blog +'" class="card-link">Article du Blog</a>';
+                        }
+
+                        $('#infosBar').html(infos)
 
                     });
 
@@ -302,24 +278,24 @@ d3.csv(URL, function (error, data) {
         console.log(filters);
         var nfilter = ncrit - nnofilter;
         console.log(ncrit, nnofilter, nfilter);
-        if (nfilter == 0) {
+        if (nfilter === 0) {
             $("#filterList").html('');
         } else {
             var fstring = "";
             filters.forEach(function (e) {
                 e.list.forEach(function (e2) {
-                    fstring += '<span class="badge badge-' + label_classes[e.key] + ' filter_label" data-name="' + e.key + '" data-option="' + e2 + '">' + e2 + ' </span>';
+                    fstring += '<span class="badge badge-' + label_classes[e.key] + ' filter_label" data-name="' + e.key + '" data-option="' + e2 + '">' + e2 + ' <i class="fas fa-times"></i> </span>';
                 })
 
             });
 
             $("#filterList").html(fstring);
-            $(".filter_label").click(function (e){
+            $(".filter_label").click(function (){
                 var name = $(this).attr("data-name");
                 var option = $(this).attr("data-option");
                 console.log(name, option);
                 removeFilter(name, option);
-                $("#"+option).prop('checked', false);
+                $('input[id="'+option+'"]').prop('checked', false);
             });
         }
 
@@ -368,7 +344,13 @@ d3.csv(URL, function (error, data) {
                 var self = this;
                 d3.select(self).transition().duration(1000).style("fill", color_scale(d[key]));
             });
+        $('#legend').html("");
+        console.log(options_list[key].length);
+        for (var o=0; o < options_list[key].length; o++){
+            console.log(options_list[key][o]);
+            $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scale(options_list[key][o]) + ';">' + options_list[key][o] + ' </span></br>');
 
+        }
     }
 
 

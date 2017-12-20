@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtijSawTOdoLHBiMO-gGfdGCx2QRUwT3s"></script>
 <table>
     <!--Row 1 - title image and colour key-->
     <tr>
@@ -26,20 +24,15 @@
             <img src="https://i.imgur.com/YgiGkOE.jpg" class="rounded-img2" alt="logo paye ta planche" data-toggle="modal" data-target="#apropos">
         </td>
     </tr>
-    <!--Row 3 - a break so there is a space in between the radio and the charts-->
-    <tr>
-        <td colspan='3'></td>
-    </tr>
+
     <!--Row 4 - charts - 4 columns, charts in individual  tables -->
     <tr>
         <!--list_title - dynamically created checkbox - see effective.js -->
         <td class='chart_td'>
-            <table class='chart_table'>
-                <div id="accordion" role="tablist">
+                <div class="card" id="accordion" role="tablist">
                 </div>
-                <div id="filterList" >
+                <div class="noselect"  id="filterList" >
                 </div>
-            </table>
         </td>
         <!--map td and title -->
         <td colspan='2' class='chart_td'>
@@ -51,9 +44,14 @@
                 <tr>
             </table>
         </td>
-        <td class='chart_td'>
-            <div id="infosBar" class="alert alert-secondary" role="alert">
-                Essayez de cliquer sur un bar !
+        <td class='chart_td popupRight'>
+            <div class="card" style="width: 20rem;">
+                <div id="infosBar" class="card-body">
+                    <h4 class="card-title">Bienvenue</h4>
+                    <p class="card-text">Essayez de cliquer sur un bar !</p>
+                </div>
+            </div>
+            <div id="legend">
             </div>
 
         </td>
@@ -61,12 +59,12 @@
     </tr>
 </table>
 <!-- Modal -->
-<div class="modal fade" id="commentaire" tabindex="-1" role="dialog" aria-labelledby="commentaireLabel"
+<div class="modal fade" id="commentaire" tabindex="-1" role="dialog" aria-labelledby="commentaireLabel1"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commentaireLabel">Comment utiliser cette carte interactive ?</h5>
+                <h5 class="modal-title" id="commentaireLabel1">Comment utiliser cette carte interactive ?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -88,12 +86,12 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="apropos" tabindex="-1" role="dialog" aria-labelledby="commentaireLabel"
+<div class="modal fade" id="apropos" tabindex="-1" role="dialog" aria-labelledby="commentaireLabel2"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="commentaireLabel">Comment utiliser cette carte interactive ?</h5>
+                <h5 class="modal-title" id="commentaireLabel2">Comment utiliser cette carte interactive ?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,7 +115,8 @@
     </div>
 </div>
 
-<script src="https://use.fontawesome.com/1f32ea24a2.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtijSawTOdoLHBiMO-gGfdGCx2QRUwT3s"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
