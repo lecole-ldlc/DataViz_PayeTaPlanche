@@ -100,7 +100,23 @@ table {
     -o-transform: scale(1.1); /* Opera */
     transform: scale(1.1);
 }
-
+.rounded-img-modal {
+  border-radius: 50%;
+  width: 15%;
+  background-color: #323333;
+  -webkit-transition: all 1s ease; /* Safari and Chrome */
+  -moz-transition: all 1s ease; /* Firefox */
+  -ms-transition: all 1s ease; /* IE 9 */
+  -o-transition: all 1s ease; /* Opera */
+  transition: all 1s ease;
+}
+.rounded-img-modal:hover {
+  -webkit-transform:scale(1.1); /* Safari and Chrome */
+  -moz-transform:scale(1.1); /* Firefox */
+  -ms-transform:scale(1.1); /* IE 9 */
+  -o-transform:scale(1.1); /* Opera */
+  transform:scale(1.1);
+}
 #title-dataviz {
     background-color: #323333;
     color: white;
@@ -109,7 +125,6 @@ table {
     text-transform: uppercase;
     text-align: center;
     font-family: "Lato Black", serif;
-
 }
 
 #title {
