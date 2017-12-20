@@ -24,10 +24,10 @@ var star4 ='<div class="stars"><span class="star on"></span><span class="star on
 var star45 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span></div>';
 var star5 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span></div>';
 
-var prix1 ='Prix : <i class="fas fa-euro-sign"></i>';
-var prix2 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
-var prix3 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
-var prix4 ='Prix : <i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix1 ='<i class="fas fa-euro-sign"></i>';
+var prix2 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix3 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix4 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 
 
 
@@ -279,15 +279,20 @@ d3.csv(URL, function (error, data) {
                             infos += star5
                         }
                         if (d.prixyelp === "€"){
-                            infos += prix1 +'</br>'
+                            infos += prix1 
                         }else if (d.prixyelp === "€€"){
-                            infos += prix2 +'</br>'
+                            infos += prix2 
                         }else if (d.prixyelp === "€€€"){
-                            infos += prix3 +'</br>'
+                            infos += prix3 
                         }else if (d.prixyelp === "€€€€"){
-                            infos += prix4 +'</br>'
+                            infos += prix4 
                         }else {
                             infos += "Aucun Prix renseigné"
+                        }
+                        if (d.wifi === "Oui"){
+                            infos += '&nbsp;&nbsp;<i class="fas fa-wifi" title="Wifi"></i>';
+                        }else{
+                            infos += '&nbsp;&nbsp;Pas de Wifi'
                         }
                         infos += '<p class="card-text">'+ d.adresse + '</p>';
                         infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a>';
@@ -301,6 +306,7 @@ d3.csv(URL, function (error, data) {
                         }
 
                         $('#infosBar').html(infos)
+                        
 
                     });
 
@@ -339,7 +345,7 @@ d3.csv(URL, function (error, data) {
         var nfilter = ncrit - nnofilter;
         console.log(ncrit, nnofilter, nfilter);
         if (nfilter === 0) {
-            $("#filterList").html('');
+            $("#filterList").html('Aucun filtre sélectionné');
         } else {
             var fstring = "";
             filters.forEach(function (e) {
