@@ -38,9 +38,9 @@ d3.csv(URL, function (error, data) {
     //2. define reset and draw functions
 
     //default to location - declare variables, reset_data and draw charts
-    var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp"};
-    var label_classes = {type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success"};
-    var search_opt = ['type', 'arrond', 'prixyelp', 'noteyelp'];
+    var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp", valide:"Testé par PtP"};
+    var label_classes = {type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success", valide: "dark"};
+    var search_opt = ['type', 'arrond', 'prixyelp', 'noteyelp', 'valide'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
@@ -226,7 +226,7 @@ d3.csv(URL, function (error, data) {
 
                 // Add a circle.
                 marker.append("circle")
-                    .attr("r", 4)
+                    .attr("r", 7)
                     .attr("cx", padding + 5)
                     .attr("cy", padding + 5)
                     .style("stroke", "none")
@@ -361,7 +361,7 @@ d3.csv(URL, function (error, data) {
                 var self = this;
                 //console.log(d);
                 if (nfilter === 0) {
-                    d3.select(self).transition().duration(1000).attr("r", 4);
+                    d3.select(self).transition().duration(1000).attr("r", 6);
                 } else {
                     var nmatch = 0;
                     $.each(all_options, function (k) {
@@ -372,7 +372,7 @@ d3.csv(URL, function (error, data) {
                     if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
                     } else if (nmatch === 1) {
-                        d3.select(self).transition().duration(1000).attr("r", 4);
+                        d3.select(self).transition().duration(1000).attr("r", 5);
                     } else {
                         d3.select(self).transition().duration(1000).attr("r", 2);
                     }
