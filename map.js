@@ -382,7 +382,7 @@ d3.csv(URL, function (error, data) {
                     if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
                     } else if (nmatch === 1) {
-                        d3.select(self).transition().duration(1000).attr("r", 5);
+                        d3.select(self).transition().duration(1000).attr("r", 2);
                     } else {
                         d3.select(self).transition().duration(1000).attr("r", 2);
                     }
