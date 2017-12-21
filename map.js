@@ -222,7 +222,8 @@ d3.csv(URL, function (error, data) {
                     .each(transform) // update existing markers
                     .enter().append("svg")
                     .each(transform)
-                    .attr("class", "marker");
+                    .attr("class", "marker")
+                    .attr("data-animation", "jump");
 
 
                 // Add a circle.
@@ -251,7 +252,7 @@ d3.csv(URL, function (error, data) {
                     })
                     .on("click", function (d) {
 
-                        var infos = '<h4 class="card-title">'+ d.nom +'</h4>';
+                        var infos = '<h4 class="card-title" data-animation="flip">'+ d.nom +'</h4>';
                         infos += '<h6 class="card-subtitle mb-2 text-muted">'+ d.type +'</h6>';
                         if (d.noteyelp === "non renseigné"){
                             infos += 'Pas de note</br>'

@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
           integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/jquery.harlem-shake-1.0.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,11 +19,11 @@
     <tr>
         <td class="title-img">
             <a href="https://payetaplanche.fr/">
-                <img src="https://i.imgur.com/EFJijBH.jpg" class="rounded-img" alt="logo paye ta planche">
+                <img src="https://i.imgur.com/EFJijBH.jpg" data-pivot="true" data-animation="rotateHalf" class="rounded-img" alt="logo paye ta planche">
             </a>
         </td>
         <td colspan='2' id='title-dataviz'>
-            <img src="https://i.imgur.com/Q8yaA4X.png" width="70%" class="img-fluid" alt="Les meilleurs bars de Lyon">
+            <img src="https://i.imgur.com/Q8yaA4X.png" width="70%" data-animation="flash" data-animation-speed="fast" class="img-fluid" alt="Les meilleurs bars de Lyon">
         </td>
         <td class="title-img">
             <img src="https://i.imgur.com/NPtliZn.jpg" class="rounded-img2" alt="logo paye ta planche"
@@ -50,7 +51,7 @@
         </td>
         <!--map td and title -->
         <td colspan='2' class='chart_td'>
-            <table class='chart_table'>
+            <table class='chart_table' data-animation="rotate">
                 <tr>
                     <td>
                         <div id="map"></div>
@@ -73,6 +74,7 @@
                         <span class="badge badge-danger">Tous les bars</span>
                     </div>
                 </div>
+            </div>
         </td>
 
     </tr>
@@ -168,6 +170,7 @@
         type="text/javascript"></script>
 <script src="fallingsnow_v6.js"
         type="text/javascript"></script>
+<script type="text/javascript" src="js/jquery.harlem-shake-1.0.js"></script>
 
 <script>
     var v = document.getElementsByTagName("audio")[0];
@@ -183,6 +186,11 @@
     });
     cheet('o f f', function () {
         $('.snowflake').html('');
+        v.pause();
+        v.currentTime = 0
+    });
+    cheet('s h a k e', function () {
+        $('.title-img, .card, .chart_table, .badge, .rounded-img, .rounded-img2, .img-fluid, .marker, .card-title').harlemShake();
         v.pause();
         v.currentTime = 0
     });
