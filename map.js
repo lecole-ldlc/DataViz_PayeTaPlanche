@@ -306,7 +306,7 @@ d3.csv(URL, function (error, data) {
                         }
 
                         $('#infosBar').html(infos)
-                        
+
 
                     });
 
@@ -421,3 +421,10 @@ d3.csv(URL, function (error, data) {
 
 
 });
+
+function snow() {
+    $('.snowflake').html('*')
+}
+function iddqd() {
+    $('.snowflake').html('<img src="http://i.imgur.com/vxt873m.png" height="42" width="42">')
+}
