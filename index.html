@@ -147,6 +147,8 @@
     </div>
 </div>
 
+<audio  src="d_e1m1.ogg" loop></audio>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAtijSawTOdoLHBiMO-gGfdGCx2QRUwT3s"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -166,14 +168,20 @@
         type="text/javascript"></script>
 
 <script>
+    var v = document.getElementsByTagName("audio")[0];
     cheet('i d d q d', function () {
-        iddqd()
+        iddqd();
+        v.play();
     });
     cheet('s n o w', function () {
-        snow()
+        snow();
+        v.pause();
+        v.currentTime = 0
     });
     cheet('o f f', function () {
         $('.snowflake').html('');
+        v.pause();
+        v.currentTime = 0
     });
 </script>
 
