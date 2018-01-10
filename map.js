@@ -393,11 +393,31 @@ d3.csv(URL, function (error, data) {
                     });
                     if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
-                        d3.select(this).moveToFront();
                     } else if (nmatch === 1) {
                         d3.select(self).transition().duration(1000).attr("r", 2);
                     } else {
                         d3.select(self).transition().duration(1000).attr("r", 2);
+                    }
+                }
+            });
+
+        d3.selectAll("marker")
+            .each(function (d) {
+                var self = this;
+                //console.log(d);
+                if (nfilter === 0) {
+
+                } else {
+                    var nmatch = 0;
+                    $.each(all_options, function (k) {
+                        if (all_options[k].contains(d[k])) {
+                            nmatch += 1;
+                        }
+                    });
+                    if (nmatch === nfilter) {
+                        d3.select(this).moveToFront();
+                    } else if (nmatch === 1) {
+                    } else {
                         d3.select(this).moveToBack();
                     }
                 }
