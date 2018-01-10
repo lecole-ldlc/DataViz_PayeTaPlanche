@@ -401,10 +401,8 @@ d3.csv(URL, function (error, data) {
                 }
             });
 
-        d3.selectAll("marker")
+        d3.selectAll(".marker")
             .each(function (d) {
-                var self = this;
-                //console.log(d);
                 if (nfilter === 0) {
 
                 } else {
