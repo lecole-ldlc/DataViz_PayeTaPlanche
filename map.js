@@ -414,9 +414,6 @@ d3.csv(URL, function (error, data) {
                     });
                     if (nmatch === nfilter) {
                         d3.select(this).moveToFront();
-                    } else if (nmatch === 1) {
-                    } else {
-                        d3.select(this).moveToBack();
                     }
                 }
             });
