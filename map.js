@@ -29,7 +29,19 @@ var prix2 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 var prix3 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 var prix4 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 
-
+d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+        this.parentNode.appendChild(this);
+    });
+};
+d3.selection.prototype.moveToBack = function() {
+    return this.each(function() {
+        var firstChild = this.parentNode.firstChild;
+        if (firstChild) {
+            this.parentNode.insertBefore(this, firstChild);
+        }
+    });
+};
 
 
 d3.csv(URL, function (error, data) {
@@ -381,10 +393,12 @@ d3.csv(URL, function (error, data) {
                     });
                     if (nmatch === nfilter) {
                         d3.select(self).transition().duration(1000).attr("r", 10);
+                        d3.select(this).moveToFront();
                     } else if (nmatch === 1) {
                         d3.select(self).transition().duration(1000).attr("r", 2);
                     } else {
                         d3.select(self).transition().duration(1000).attr("r", 2);
+                        d3.select(this).moveToBack();
                     }
                 }
             });
