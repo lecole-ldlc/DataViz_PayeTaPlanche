@@ -72,7 +72,7 @@ d3.csv(URL, function (error, data) {
             });
         options_list[d].sort()
     });
-    console.log(options_list);
+    //console.log(options_list);
 
     function draw_list(search_opt) {
 
@@ -103,7 +103,6 @@ d3.csv(URL, function (error, data) {
             $(contentlist).html(radio_string);
             //set the on_change event to redraw charts whenever a checkbox option is selected
             $('input[name="' + o + '"]').change(function () {
-                console.log($(this));
                 var name = $(this)[0].name;
                 var option = $(this)[0].value;
 
@@ -235,6 +234,9 @@ d3.csv(URL, function (error, data) {
                     .enter().append("svg")
                     .each(transform)
                     .attr("class", "marker")
+                    .attr("id", function(d,i){
+                        return "marker" + i;
+                    })
                     .attr("data-animation", "jump");
 
 
@@ -244,7 +246,7 @@ d3.csv(URL, function (error, data) {
                     .attr("cx", padding + 5)
                     .attr("cy", padding + 5)
                     .style("stroke", "none")
-                    .on("mouseover", function (d) {
+                    .on("mouseover", function (d,i) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
                         t_text = d.nom ;
@@ -256,11 +258,9 @@ d3.csv(URL, function (error, data) {
                     .on("mousemove", function () {
 
                     })
-                    .on("mouseout", function () {
+                    .on("mouseout", function (d) {
                         tooltip.style("visibility", "hidden");
                         d3.select(this).style("cursor", "default");
-
-
                     })
                     .on("click", function (d) {
 
@@ -354,9 +354,7 @@ d3.csv(URL, function (error, data) {
             }
             ncrit += 1;
         });
-        console.log(filters);
         var nfilter = ncrit - nnofilter;
-        console.log(ncrit, nnofilter, nfilter);
         if (nfilter === 0) {
             $("#filterList").html('Aucun filtre sélectionné');
         } else {
@@ -372,7 +370,6 @@ d3.csv(URL, function (error, data) {
             $(".filter_label").click(function (){
                 var name = $(this).attr("data-name");
                 var option = $(this).attr("data-option");
-                console.log(name, option);
                 removeFilter(name, option);
                 $('input[id="'+option+'"]').prop('checked', false);
             });
@@ -401,6 +398,7 @@ d3.csv(URL, function (error, data) {
                 }
             });
 
+
         d3.selectAll(".marker")
             .each(function (d) {
                 if (nfilter === 0) {
@@ -413,7 +411,7 @@ d3.csv(URL, function (error, data) {
                         }
                     });
                     if (nmatch === nfilter) {
-                        d3.select(this).moveToFront();
+                        //d3.select(self).moveToFront();
                     }
                 }
             });
@@ -441,9 +439,7 @@ d3.csv(URL, function (error, data) {
                 d3.select(self).transition().duration(1000).style("fill", color_scale(d[key]));
             });
         $('#legend').html("");
-        console.log(options_list[key].length);
         for (var o=0; o < options_list[key].length; o++){
-            console.log(options_list[key][o]);
             $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scale(options_list[key][o]) + ';">' + options_list[key][o] + ' </span></br>');
 
         }
