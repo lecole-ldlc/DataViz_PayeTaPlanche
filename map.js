@@ -13,29 +13,29 @@ var all_options = {};
 var color_scale = d3.scaleOrdinal(d3.schemeCategory20);
 
 var star0 = '<div class="stars"><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
-var star05 ='<div class="stars"><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
-var star1 ='<div class="stars"><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
-var star15 ='<div class="stars"><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
-var star2 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
-var star25 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span></div>';
-var star3 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span></div>';
-var star35 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span></div>';
-var star4 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span></div>';
-var star45 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span></div>';
-var star5 ='<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span></div>';
+var star05 = '<div class="stars"><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star1 = '<div class="stars"><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star15 = '<div class="stars"><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star2 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span><span class="star"></span></div>';
+var star25 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span><span class="star"></span></div>';
+var star3 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span><span class="star"></span></div>';
+var star35 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span><span class="star"></span></div>';
+var star4 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star"></span></div>';
+var star45 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star half"></span></div>';
+var star5 = '<div class="stars"><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span><span class="star on"></span></div>';
 
-var prix1 ='<i class="fas fa-euro-sign"></i>';
-var prix2 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
-var prix3 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
-var prix4 ='<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix1 = '<i class="fas fa-euro-sign"></i>';
+var prix2 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix3 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
+var prix4 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 
-d3.selection.prototype.moveToFront = function() {
-    return this.each(function(){
+d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
         this.parentNode.appendChild(this);
     });
 };
-d3.selection.prototype.moveToBack = function() {
-    return this.each(function() {
+d3.selection.prototype.moveToBack = function () {
+    return this.each(function () {
         var firstChild = this.parentNode.firstChild;
         if (firstChild) {
             this.parentNode.insertBefore(this, firstChild);
@@ -51,9 +51,15 @@ d3.csv(URL, function (error, data) {
     //2. define reset and draw functions
 
     //default to location - declare variables, reset_data and draw charts
-    var label = {type: "Type de Bars", arrond: "Arrondissement", prixyelp: "Prix", noteyelp: "Note Yelp", valide:"Testé par PtP"};
-    var label_classes = {type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success", valide: "dark"};
-    var search_opt = ['type', 'arrond', 'prixyelp', 'noteyelp', 'valide'];
+    var label = {
+        valide: "Avis Paye Ta Planche",
+        type: "Type de Bars",
+        arrond: "Arrondissement",
+        prixyelp: "Prix",
+        noteyelp: "Note Yelp"
+    };
+    var label_classes = {valide: "dark", type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success"};
+    var search_opt = ['valide', 'type', 'arrond', 'prixyelp'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
@@ -247,7 +253,7 @@ d3.csv(URL, function (error, data) {
                     .on("mouseover", function (d) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
-                        t_text = d.nom ;
+                        t_text = d.nom;
                         tooltip.html(t_text);
                         d3.select(this).style("cursor", "pointer");
                         tooltip.style("visibility", "visible");
@@ -264,58 +270,55 @@ d3.csv(URL, function (error, data) {
                     })
                     .on("click", function (d) {
 
-                        var infos = '<h4 class="card-title" data-animation="flip">'+ d.nom +'</h4>';
-                        infos += '<h6 class="card-subtitle mb-2 text-muted">'+ d.type +'</h6>';
-                        if (d.noteyelp === "non renseigné"){
+                        var infos = '<h4 class="card-title" data-animation="flip">' + d.nom + '</h4>';
+                        infos += '<h6 class="card-subtitle mb-2 text-muted">' + d.type + '</h6>';
+                        if (d.noteyelp === "non renseigné") {
                             infos += 'Pas de note</br>'
-                        }else if (d.noteyelp === "0"){
+                        } else if (d.noteyelp === "0") {
                             infos += star0
-                        }else if (d.noteyelp === "0,5"){
+                        } else if (d.noteyelp === "0,5") {
                             infos += star05
-                        }else if (d.noteyelp === "1"){
+                        } else if (d.noteyelp === "1") {
                             infos += star1
-                        }else if (d.noteyelp === "1,5"){
+                        } else if (d.noteyelp === "1,5") {
                             infos += star15
-                        }else if (d.noteyelp === "2"){
+                        } else if (d.noteyelp === "2") {
                             infos += star2
-                        }else if (d.noteyelp === "2,5"){
+                        } else if (d.noteyelp === "2,5") {
                             infos += star25
-                        }else if (d.noteyelp === "3"){
+                        } else if (d.noteyelp === "3") {
                             infos += star3
-                        }else if (d.noteyelp === "3,5"){
+                        } else if (d.noteyelp === "3,5") {
                             infos += star35
-                        }else if (d.noteyelp === "4"){
+                        } else if (d.noteyelp === "4") {
                             infos += star4
-                        }else if (d.noteyelp === "4,5"){
+                        } else if (d.noteyelp === "4,5") {
                             infos += star45
-                        }else if (d.noteyelp === "5"){
+                        } else if (d.noteyelp === "5") {
                             infos += star5
                         }
-                        if (d.prixyelp === "€"){
-                            infos += prix1 
-                        }else if (d.prixyelp === "€€"){
-                            infos += prix2 
-                        }else if (d.prixyelp === "€€€"){
-                            infos += prix3 
-                        }else if (d.prixyelp === "€€€€"){
-                            infos += prix4 
-                        }else {
+                        if (d.prixyelp === "€") {
+                            infos += prix1
+                        } else if (d.prixyelp === "€€") {
+                            infos += prix2
+                        } else if (d.prixyelp === "€€€") {
+                            infos += prix3
+                        } else if (d.prixyelp === "€€€€") {
+                            infos += prix4
+                        } else {
                             infos += "Aucun Prix renseigné"
                         }
-                        if (d.wifi === "Oui"){
+                        if (d.wifi === "Oui") {
                             infos += '&nbsp;&nbsp;<i class="fas fa-wifi" title="Wifi"></i>';
-                        }else{
+                        } else {
                             infos += '&nbsp;&nbsp;Pas de Wifi'
                         }
-                        infos += '<p class="card-text">'+ d.adresse + '</p>';
+                        infos += '<p class="card-text">' + d.adresse + '</p>';
                         infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a>';
 
 
-
-
-
-                        if (d.blog !== ""){
-                            infos += '<a target="_blank" href="'+ d.blog +'" class="card-link">Article du Blog</a>';
+                        if (d.blog !== "") {
+                            infos += '<a target="_blank" href="' + d.blog + '" class="card-link">Article du Blog</a>';
                         }
 
                         $('#infosBar').html(infos)
@@ -369,12 +372,12 @@ d3.csv(URL, function (error, data) {
             });
 
             $("#filterList").html(fstring);
-            $(".filter_label").click(function (){
+            $(".filter_label").click(function () {
                 var name = $(this).attr("data-name");
                 var option = $(this).attr("data-option");
                 console.log(name, option);
                 removeFilter(name, option);
-                $('input[id="'+option+'"]').prop('checked', false);
+                $('input[id="' + option + '"]').prop('checked', false);
             });
         }
 
@@ -442,9 +445,86 @@ d3.csv(URL, function (error, data) {
             });
         $('#legend').html("");
         console.log(options_list[key].length);
-        for (var o=0; o < options_list[key].length; o++){
+        for (var o = 0; o < options_list[key].length; o++) {
             console.log(options_list[key][o]);
             $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scale(options_list[key][o]) + ';">' + options_list[key][o] + ' </span></br>');
+
+        }
+    }
+
+    $("#selector_info").change(function (e) {
+        colorizeBars2($(this).val());
+    });
+
+    var color_scales = {
+        "hh": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
+        "wifi": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
+        "open": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
+        "open23": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
+    }
+
+    var legends = {
+        "hh": [["Happy Hour", 1], ["Pas d'Happy Hour", 0]],
+        "wifi": [["Wifi", 1], ["Pas de Wifi", 0]],
+        "open": [["Ouvert", 1], ["Fermé", 0]],
+        "open23": [["Ouvert après 23h", 1], ["Fermé après 23h", 0]],
+    }
+
+    var jour = new Date();
+    var today = jour.getDay();
+    var heure = jour.getHours();
+    var minutes = jour.getMinutes() + 60 * heure;
+    function colorizeBars2(key) {
+
+        d3.selectAll("circle")
+            .each(function (d) {
+                var cond = false;
+
+                if (key == "hh") {
+                    if (d["Happy Hour"] == "Oui") {
+                        cond = true;
+                    }
+                } else if (key == "wifi") {
+                    if (d["wifi"] == "Oui") {
+                        cond = true;
+                    }
+                } else if (key == "open") {
+                    var res = d[today + " - HO"].split(":");
+                    if (res.length < 2) {
+                        cond = false;
+                    } else {
+                        var open_time = parseInt(res[0]) * 60 + parseInt(res[1]);
+                        res = d[today + " - HF"].split(":");
+                        var close_time = parseInt(res[0]) * 60 + parseInt(res[1]);
+                        if (close_time < 8*60 && minutes > 8*60){
+                            close_time = 24*60;
+                        }
+                        if (minutes < 8*60){
+                            open_time = 0;
+                        }
+                        if (open_time < minutes && minutes < close_time) {
+                            cond = true
+                        }
+                    }
+                    console.log(d);
+                    console.log(minutes / 60);
+                    console.log(open_time / 60);
+                    console.log(close_time / 60);
+                    console.log(cond);
+
+                } else if (key == "open23") {
+                    if (d["Ouvert après 23h"] == "Oui") {
+                        cond = true;
+                    }
+                }
+                d3.select(this).transition().duration(1000).style("fill", color_scales[key](cond ? 1 : 0));
+
+            });
+        $('#legend').html("");
+        console.log(legends[key].length);
+        for (var index = 0; index < legends[key].length; index++) {
+            console.log(legends[key][index]);
+            $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scales[key](legends[key][index][1]) + ';">' + legends[key][index][0] + ' </span>&nbsp;');
 
         }
     }
@@ -455,6 +535,7 @@ d3.csv(URL, function (error, data) {
 function snow() {
     $('.snowflake').html('*')
 }
+
 function iddqd() {
     $('.snowflake').html('<img src="http://i.imgur.com/vxt873m.png" height="42" width="42">')
 }
