@@ -78,7 +78,6 @@ d3.csv(URL, function (error, data) {
             });
         options_list[d].sort()
     });
-    console.log(options_list);
 
     function draw_list(search_opt) {
 
@@ -109,7 +108,6 @@ d3.csv(URL, function (error, data) {
             $(contentlist).html(radio_string);
             //set the on_change event to redraw charts whenever a checkbox option is selected
             $('input[name="' + o + '"]').change(function () {
-                console.log($(this));
                 var name = $(this)[0].name;
                 var option = $(this)[0].value;
 
@@ -235,13 +233,19 @@ d3.csv(URL, function (error, data) {
                     .attr("class", "tooltip_map")
                     .html("");
 
+
                 var marker = layer.selectAll("svg")
-                    .data(my_data)
+                    .data(my_data, function (d) {
+                        return d.nom;
+                    })
                     .each(transform) // update existing markers
                     .enter().append("svg")
-                    .each(transform)
+                    .attr("id", function (d, i) {
+                        return "marker_" + i;
+                    })
                     .attr("class", "marker")
-                    .attr("data-animation", "jump");
+                    .attr("data-animation", "jump")
+                    .each(transform);
 
 
                 // Add a circle.
@@ -345,7 +349,6 @@ d3.csv(URL, function (error, data) {
 
     function selectedBars() {
 
-
         var nnofilter = 0;
         var ncrit = 0;
         var filters = [];
@@ -357,9 +360,7 @@ d3.csv(URL, function (error, data) {
             }
             ncrit += 1;
         });
-        console.log(filters);
         var nfilter = ncrit - nnofilter;
-        console.log(ncrit, nnofilter, nfilter);
         if (nfilter === 0) {
             $("#filterList").html('Aucun filtre sélectionné');
         } else {
@@ -375,39 +376,49 @@ d3.csv(URL, function (error, data) {
             $(".filter_label").click(function () {
                 var name = $(this).attr("data-name");
                 var option = $(this).attr("data-option");
-                console.log(name, option);
                 removeFilter(name, option);
                 $('input[id="' + option + '"]').prop('checked', false);
             });
         }
 
-        d3.selectAll("circle")
-            .each(function (d) {
-                var self = this;
-                //console.log(d);
+        d3.selectAll(".marker")
+            .filter(function (d) {
                 if (nfilter === 0) {
-                    d3.select(self).transition().duration(1000).attr("r", 6);
-                } else {
-                    var nmatch = 0;
-                    $.each(all_options, function (k) {
-                        if (all_options[k].contains(d[k])) {
-                            nmatch += 1;
-                        }
-                    });
-                    if (nmatch === nfilter) {
-                        d3.select(self).transition().duration(1000).attr("r", 10);
-                    } else if (nmatch === 1) {
-                        d3.select(self).transition().duration(1000).attr("r", 2);
-                    } else {
-                        d3.select(self).transition().duration(1000).attr("r", 2);
-                    }
+                    return true;
                 }
-            });
+            }).select("circle").transition().duration(1000).attr("r", 6);
 
         d3.selectAll(".marker")
-            .each(function (d) {
-                if (nfilter === 0) {
+            .filter(function (d) {
+                var nmatch = 0;
+                $.each(all_options, function (k) {
+                    if (all_options[k].contains(d[k])) {
+                        nmatch += 1;
+                    }
+                });
+                if (nmatch == nfilter && nfilter > 0) {
+                    return true
+                }
+            }).select("circle").transition().duration(1000).attr("r", 10);
 
+        d3.selectAll(".marker")
+            .filter(function (d) {
+                var nmatch = 0;
+                $.each(all_options, function (k) {
+                    if (all_options[k].contains(d[k])) {
+                        nmatch += 1;
+                    }
+                });
+                if (nmatch != nfilter && nfilter > 0) {
+                    return true
+                }
+            }).select("circle").transition().duration(1000).attr("r", 0);
+
+
+        d3.selectAll(".marker")
+            .filter(function (d) {
+                if (nfilter === 0) {
+                    return 0;
                 } else {
                     var nmatch = 0;
                     $.each(all_options, function (k) {
@@ -415,11 +426,10 @@ d3.csv(URL, function (error, data) {
                             nmatch += 1;
                         }
                     });
-                    if (nmatch === nfilter) {
-                        d3.select(this).moveToFront();
-                    }
+                    return nmatch == nfilter;
                 }
-            });
+            })
+            .raise();
 
     }
 
@@ -444,9 +454,7 @@ d3.csv(URL, function (error, data) {
                 d3.select(self).transition().duration(1000).style("fill", color_scale(d[key]));
             });
         $('#legend').html("");
-        console.log(options_list[key].length);
         for (var o = 0; o < options_list[key].length; o++) {
-            console.log(options_list[key][o]);
             $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scale(options_list[key][o]) + ';">' + options_list[key][o] + ' </span></br>');
 
         }
@@ -461,7 +469,7 @@ d3.csv(URL, function (error, data) {
         "wifi": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "open": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "open23": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
-        "terrasse": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0,1]),
+        "terrasse": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
     }
 
     var legends = {
@@ -476,67 +484,76 @@ d3.csv(URL, function (error, data) {
     var today = jour.getDay();
     var heure = jour.getHours();
     var minutes = jour.getMinutes() + 60 * heure;
+
     function colorizeBars2(key) {
 
         d3.selectAll("circle")
             .each(function (d) {
-                var cond = false;
+                    var cond = false;
 
-                if (key == "hh") {
-                    if (d["Happy Hour"] == "Oui") {
-                        cond = true;
-                    }
-                } else if (key == "wifi") {
-                    if (d["wifi"] == "Oui") {
-                        cond = true;
-                    }
-                } else if (key == "open") {
-                    var res = d[today + " - HO"].split(":");
-                    if (res.length < 2) {
-                        cond = false;
-                    } else {
-                        var open_time = parseInt(res[0]) * 60 + parseInt(res[1]);
-                        res = d[today + " - HF"].split(":");
-                        var close_time = parseInt(res[0]) * 60 + parseInt(res[1]);
-                        if (close_time < 8*60 && minutes > 8*60){
-                            close_time = 24*60;
+                    if (key == "hh") {
+                        if (d["Happy Hour"] == "Oui") {
+                            cond = true;
                         }
-                        if (minutes < 8*60){
-                            open_time = 0;
+                    } else if (key == "wifi") {
+                        if (d["wifi"] == "Oui") {
+                            cond = true;
                         }
-                        if (open_time < minutes && minutes < close_time) {
-                            cond = true
-                        }
-                    }
-                    console.log(d);
-                    console.log(minutes / 60);
-                    console.log(open_time / 60);
-                    console.log(close_time / 60);
-                    console.log(cond);
+                    } else if (key == "open") {
+                        var open_time = undefined;
+                        var close_time = undefined;
 
-                } else if (key == "open23") {
-                    if (d["Ouvert après 23h"] == "Oui") {
-                        cond = true;
+                        if (d[today + " - HO"]) {
+                            var res = d[today + " - HO"].split(":");
+                            if (res.length >= 2) {
+                                open_time = parseInt(res[0]) * 60 + parseInt(res[1]);
+                            }
+                        }
+                        if (d[today + " - HF"]) {
+                            var res = d[today + " - HO"].split(":");
+                            if (res.length >= 2) {
+                                close_time = parseInt(res[0]) * 60 + parseInt(res[1]);
+                            }
+                        }
+
+                        if (open_time != undefined && close_time != undefined) {
+                            if (close_time < open_time) {
+                                if (close_time <= minutes <= open_time) {
+                                    cond = false;
+                                }
+                            }
+                            else {
+                                if (open_time <= minutes <= close_time) {
+                                    cond = true;
+                                }
+                            }
+                        } else {
+                            cond = false;
+                        }
                     }
-                } else if (key == "terrasse") {
-                    if (d["terrasse"] == "Oui") {
-                        cond = true;
+                    else if (key == "open23") {
+                        if (d["Ouvert après 23h"] == "Oui") {
+                            cond = true;
+                        }
+                    } else if (key == "terrasse") {
+                        if (d["terrasse"] == "Oui") {
+                            cond = true;
+                        }
                     }
+                    d3.select(this).transition().duration(1000).style("fill", color_scales[key](cond ? 1 : 0));
+
                 }
-                d3.select(this).transition().duration(1000).style("fill", color_scales[key](cond ? 1 : 0));
-
-            });
+            );
         $('#legend').html("");
-        console.log(legends[key].length);
         for (var index = 0; index < legends[key].length; index++) {
-            console.log(legends[key][index]);
             $('#legend').append('<span class="badge badge-color" style="background-color:' + color_scales[key](legends[key][index][1]) + ';">' + legends[key][index][0] + ' </span>&nbsp;');
 
         }
     }
 
 
-});
+})
+;
 
 function snow() {
     $('.snowflake').html('*')
