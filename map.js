@@ -97,11 +97,26 @@ d3.csv(URL, function (error, data) {
 
             all_options[o].sort();
 
+
+            var nest = d3.nest()
+                .key(function (d) {
+                    return d[o];
+                })
+                .rollup(function (leaves) {
+                    return leaves.length;
+                })
+                .entries(data);
             var radio_string = "";
             for (var j = 0; j < options_list[o].length; j++) {
+
+                var e = nest.find(function (e) {
+                    return e.key == options_list[o][j];
+                });
+
                 radio_string += "<label class='custom-control custom-checkbox' for='" + options_list[o][j] + "'><input type='checkbox' class='custom-control-input' id='" + options_list[o][j];
                 radio_string += "' name='" + o + "' value='" + options_list[o][j];
                 radio_string += "'><span class='custom-control-indicator'></span><span class='custom-control-description'>" + options_list[o][j];
+                radio_string += "<span class='badge'>" + Math.round(e.value / data.length * 100) + "% (" + e.value + ")</span>";
                 radio_string += "</span></label><br>";
             }
             var contentlist = '#contentlist' + i;
