@@ -461,6 +461,7 @@ d3.csv(URL, function (error, data) {
         "wifi": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "open": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "open23": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
+        "terrasse": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0,1]),
     }
 
     var legends = {
@@ -468,6 +469,7 @@ d3.csv(URL, function (error, data) {
         "wifi": [["Wifi", 1], ["Pas de Wifi", 0]],
         "open": [["Ouvert", 1], ["Fermé", 0]],
         "open23": [["Ouvert après 23h", 1], ["Fermé après 23h", 0]],
+        "terrasse": [["Avec terrasse", 1], ["Sans terrasse", 0]]
     }
 
     var jour = new Date();
@@ -514,6 +516,10 @@ d3.csv(URL, function (error, data) {
 
                 } else if (key == "open23") {
                     if (d["Ouvert après 23h"] == "Oui") {
+                        cond = true;
+                    }
+                } else if (key == "terrasse") {
+                    if (d["terrasse"] == "Oui") {
                         cond = true;
                     }
                 }
