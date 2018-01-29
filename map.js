@@ -1,4 +1,4 @@
-var URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQny4aobPl0WBH4qnx8jQSmaBQp_hpldR998M9Ojkf_t2TFGHkkhH-zt3hhnpH65RV8QNDSPZC5YpFd/pub?gid=879140185&single=true&output=csv'
+var URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQny4aobPl0WBH4qnx8jQSmaBQp_hpldR998M9Ojkf_t2TFGHkkhH-zt3hhnpH65RV8QNDSPZC5YpFd/pub?gid=879140185&single=true&output=csv';
 Array.prototype.contains = function (obj) {
     var i = this.length;
     while (i--) {
@@ -29,20 +29,6 @@ var prix2 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 var prix3 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 var prix4 = '<i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i><i class="fas fa-euro-sign"></i>';
 
-d3.selection.prototype.moveToFront = function () {
-    return this.each(function () {
-        this.parentNode.appendChild(this);
-    });
-};
-d3.selection.prototype.moveToBack = function () {
-    return this.each(function () {
-        var firstChild = this.parentNode.firstChild;
-        if (firstChild) {
-            this.parentNode.insertBefore(this, firstChild);
-        }
-    });
-};
-
 
 d3.csv(URL, function (error, data) {
     //1. load data and throw error if there is one
@@ -59,7 +45,7 @@ d3.csv(URL, function (error, data) {
         noteyelp: "Note Yelp"
     };
     var label_classes = {valide: "dark", type: "primary", arrond: "warning", prixyelp: "danger", noteyelp: "success"};
-    var search_opt = ['valide', 'type', 'arrond', 'prixyelp'];
+    var search_opt = ['valide', 'type', 'prixyelp'];
     var options_list = [];
 
     data.columns.forEach(function (c) {
@@ -86,7 +72,7 @@ d3.csv(URL, function (error, data) {
             var titleListe = '<div class="card">';
             titleListe += '<div class="card-header" role="tab" id="heading' + i + '">';
             titleListe += '<h5 class="mb-0">';
-            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">' + label[o] + '</a> <a href="#" class="colorize" data-filter="' + o + '"><i class="fas fa-paint-brush float-right"></i></a></h5></div>';
+            titleListe += '<a class="collapsed" data-toggle="collapse" href="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">' + label[o] + '</a></h5></div>';
             titleListe += '<div id="collapse' + i + '" class="collapse';
             if (i === 0) {
                 titleListe += ' show'
@@ -110,7 +96,7 @@ d3.csv(URL, function (error, data) {
             for (var j = 0; j < options_list[o].length; j++) {
 
                 var e = nest.find(function (e) {
-                    return e.key == options_list[o][j];
+                    return e.key === options_list[o][j];
                 });
 
                 radio_string += "<label class='custom-control custom-checkbox' for='" + options_list[o][j] + "'><input type='checkbox' class='custom-control-input' id='" + options_list[o][j];
@@ -137,7 +123,7 @@ d3.csv(URL, function (error, data) {
                 selectedBars();
             });
 
-            $(".colorize").click(function (e) {
+            $(".colorize").click(function () {
                 var key = $(this).attr("data-filter");
                 colorizeBars(key);
             });
@@ -200,10 +186,12 @@ d3.csv(URL, function (error, data) {
         //document.getElementById('map_title').innerHTML = "Map for selected " + search_opt.toUpperCase();
 
         //2. Apply filters
-        my_data = apply_filters(data, search_opt, filter_by);
+        var my_data = apply_filters(data, search_opt, filter_by);
 
         var bound = new google.maps.LatLngBounds();
-        for (m in my_data) {
+        var long;
+        var lat;
+        for (var m in my_data) {
             long = +my_data[m].longitude;
             lat = +my_data[m].latitude;
             if (isNaN(my_data[m].longitude)) {
@@ -223,7 +211,360 @@ d3.csv(URL, function (error, data) {
             center: new google.maps.LatLng(45.7642037, 4.8376517),
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             styles: [
-                {featureType: 'poi', stylers: [{visibility: "off"}]}]
+                {
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#f5f5f5"
+                        }
+                    ]
+                },
+                {
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#616161"
+                        }
+                    ]
+                },
+                {
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                        {
+                            "color": "#f5f5f5"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative",
+                    "stylers": [
+                        {
+                            "color": "#323333"
+                        },
+                        {
+                            "weight": 0.5
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.land_parcel",
+                    "elementType": "labels",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.land_parcel",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#bdbdbd"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.locality",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.locality",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.neighborhood",
+                    "stylers": [
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.neighborhood",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.neighborhood",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#606b75"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#660000"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#eeeeee"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#757575"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.attraction",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.business",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.government",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.medical",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#e5e5e5"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#9e9e9e"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.place_of_worship",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.school",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.sports_complex",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#ffffff"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#757575"
+                        },
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [
+                        {
+                            "color": "#cbced3"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#dadada"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#616161"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "labels",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "labels.text",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#9e9e9e"
+                        },
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit.line",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#e5e5e5"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit.station",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#eeeeee"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit.station.airport",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit.station.bus",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "color": "#c9c9c9"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#f4f4f4"
+                        }
+                    ]
+                }
+            ]
         });
 
 
@@ -268,7 +609,7 @@ d3.csv(URL, function (error, data) {
                     .attr("r", 7)
                     .attr("cx", padding + 5)
                     .attr("cy", padding + 5)
-                    .style("stroke", "none")
+                    //.style("stroke", "none")
                     .on("mouseover", function (d) {
                         //sets tooltip.  t_text = content in html
                         tooltip.style("visibility", "hidden");
@@ -367,7 +708,7 @@ d3.csv(URL, function (error, data) {
         var nnofilter = 0;
         var ncrit = 0;
         var filters = [];
-        $.each(all_options, function (k, v) {
+        $.each(all_options, function (k) {
             if (all_options[k].length === 0) {
                 nnofilter += 1;
             } else {
@@ -397,7 +738,7 @@ d3.csv(URL, function (error, data) {
         }
 
         d3.selectAll(".marker")
-            .filter(function (d) {
+            .filter(function () {
                 if (nfilter === 0) {
                     return true;
                 }
@@ -411,10 +752,10 @@ d3.csv(URL, function (error, data) {
                         nmatch += 1;
                     }
                 });
-                if (nmatch == nfilter && nfilter > 0) {
+                if (nmatch === nfilter && nfilter > 0) {
                     return true
                 }
-            }).select("circle").transition().duration(1000).attr("r", 10);
+            }).select("circle").transition().duration(1000).attr("r", 9);
 
         d3.selectAll(".marker")
             .filter(function (d) {
@@ -424,7 +765,7 @@ d3.csv(URL, function (error, data) {
                         nmatch += 1;
                     }
                 });
-                if (nmatch != nfilter && nfilter > 0) {
+                if (nmatch !== nfilter && nfilter > 0) {
                     return true
                 }
             }).select("circle").transition().duration(1000).attr("r", 0);
@@ -441,7 +782,7 @@ d3.csv(URL, function (error, data) {
                             nmatch += 1;
                         }
                     });
-                    return nmatch == nfilter;
+                    return nmatch === nfilter;
                 }
             })
             .raise();
@@ -485,7 +826,7 @@ d3.csv(URL, function (error, data) {
         "open": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "open23": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
         "terrasse": d3.scaleOrdinal(["#CA322E", "#46B24D"]).domain([0, 1]),
-    }
+    };
 
     var legends = {
         "hh": [["Happy Hour", 1], ["Pas d'Happy Hour", 0]],
@@ -493,7 +834,7 @@ d3.csv(URL, function (error, data) {
         "open": [["Ouvert", 1], ["Fermé", 0]],
         "open23": [["Ouvert après 23h", 1], ["Fermé après 23h", 0]],
         "terrasse": [["Avec terrasse", 1], ["Sans terrasse", 0]]
-    }
+    };
 
     var jour = new Date();
     var today = jour.getDay();
@@ -506,15 +847,15 @@ d3.csv(URL, function (error, data) {
             .each(function (d) {
                     var cond = false;
 
-                    if (key == "hh") {
-                        if (d["Happy Hour"] == "Oui") {
+                    if (key === "hh") {
+                        if (d["Happy Hour"] === "Oui") {
                             cond = true;
                         }
-                    } else if (key == "wifi") {
-                        if (d["wifi"] == "Oui") {
+                    } else if (key === "wifi") {
+                        if (d["wifi"] === "Oui") {
                             cond = true;
                         }
-                    } else if (key == "open") {
+                    } else if (key === "open") {
                         var open_time = undefined;
                         var close_time = undefined;
 
@@ -531,7 +872,7 @@ d3.csv(URL, function (error, data) {
                             }
                         }
 
-                        if (open_time != undefined && close_time != undefined) {
+                        if (open_time !== undefined && close_time !== undefined) {
                             if (close_time < open_time) {
                                 if (close_time <= minutes <= open_time) {
                                     cond = false;
@@ -546,12 +887,12 @@ d3.csv(URL, function (error, data) {
                             cond = false;
                         }
                     }
-                    else if (key == "open23") {
-                        if (d["Ouvert après 23h"] == "Oui") {
+                    else if (key === "open23") {
+                        if (d["Ouvert après 23h"] === "Oui") {
                             cond = true;
                         }
-                    } else if (key == "terrasse") {
-                        if (d["terrasse"] == "Oui") {
+                    } else if (key === "terrasse") {
+                        if (d["terrasse"] === "Oui") {
                             cond = true;
                         }
                     }

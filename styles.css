@@ -47,7 +47,7 @@ table {
 .effective circle {
     fill: #DC143C;
     stroke: grey;
-    stroke-width: 1px;
+    stroke-width: 1;
 }
 
 /* Colour Table and individual tds - Colour key, Row 1*/
@@ -62,7 +62,7 @@ table {
     width: 20%;
 }
 .img-fluid2 {
-  max-width: auto;
+  max-width: 100%;
   height: 20%;
   text-align: center;
 }
@@ -303,8 +303,8 @@ table {
 
 #snowflakeContainer {
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
 }
 .snowflake {
     padding-left: 15px;
