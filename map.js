@@ -9,6 +9,8 @@ Array.prototype.contains = function (obj) {
     return false;
 };
 
+
+
 var all_options = {};
 var color_scale = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -65,6 +67,45 @@ d3.csv(URL, function (error, data) {
         options_list[d].sort()
     });
 
+    function getOpenGraph(url, d){
+        var urlEncoded = encodeURIComponent(url);
+        var apiKey = '5a74274a65fbc4981a727893'; // <-- Replace with your app_id from https://www.opengraph.io/
+
+// The entire request is just a simple get request with optional query parameters
+        var requestUrl = "https://opengraph.io/api/1.1/site/" + urlEncoded + '?app_id=' + apiKey;
+
+        $.getJSON(requestUrl, function( json ) {
+
+            // Throw the object in the console to see what it looks like!
+            console.log('json', json);
+
+            // Update the HTML elements!
+            var infosptp = '<img class="card-img-top" src="'+ json.hybridGraph.image +'" alt="'+ d.nom +'">';
+            infosptp += '<div class="card-body">';
+            infosptp += '<h4 class="card-title" data-animation="flip">' + d.nom + '</h4>';
+            infosptp += '<h6 class="card-subtitle mb-2 text-muted">' + json.hybridGraph.title + '</h6>';
+            infosptp += '<p class="card-text">' + json.hybridGraph.description + '...</p>';
+            infosptp += '<a target="_blank" href="' + d.blog + '" class="card-link">Lire la suite</a>';
+            infosptp += '</div>';
+
+            $('#loadOpenGraphData').click(function () {
+
+                $('#infosBar').html(infosptp);
+
+            });
+        });
+
+
+
+
+
+
+    }
+
+
+
+
+
     function draw_list(search_opt) {
 
 
@@ -102,7 +143,7 @@ d3.csv(URL, function (error, data) {
                 radio_string += "<label class='custom-control custom-checkbox' for='" + options_list[o][j] + "'><input type='checkbox' class='custom-control-input' id='" + options_list[o][j];
                 radio_string += "' name='" + o + "' value='" + options_list[o][j];
                 radio_string += "'><span class='custom-control-indicator'></span><span class='custom-control-description'>" + options_list[o][j];
-                radio_string += "<span class='badge'>" + Math.round(e.value / data.length * 100) + "% (" + e.value + ")</span>";
+                radio_string += "&nbsp;&nbsp;<span class='badge badge-primary'>" + Math.round(e.value / data.length * 100) + "% (" + e.value + ")</span>";
                 radio_string += "</span></label><br>";
             }
             var contentlist = '#contentlist' + i;
@@ -195,7 +236,7 @@ d3.csv(URL, function (error, data) {
             long = +my_data[m].longitude;
             lat = +my_data[m].latitude;
             if (isNaN(my_data[m].longitude)) {
-                my_data.splice(m, 1)
+                //my_data.splice(m, 1)
             } else {
                 bound.extend(new google.maps.LatLng(lat, long));
             }
@@ -630,7 +671,8 @@ d3.csv(URL, function (error, data) {
                     })
                     .on("click", function (d) {
 
-                        var infos = '<h4 class="card-title" data-animation="flip">' + d.nom + '</h4>';
+                        var infos = '<div class="card-body">';
+                        infos += '<h4 class="card-title" data-animation="flip">' + d.nom + '</h4>';
                         infos += '<h6 class="card-subtitle mb-2 text-muted">' + d.type + '</h6>';
                         if (d.noteyelp === "non renseigné") {
                             infos += 'Pas de note</br>'
@@ -674,17 +716,25 @@ d3.csv(URL, function (error, data) {
                             infos += '&nbsp;&nbsp;Pas de Wifi'
                         }
                         infos += '<p class="card-text">' + d.adresse + '</p>';
-                        infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a>';
+                        infos += '<a target="_blank" href="https://www.google.fr/maps/place/' + d.adresse + '" class="card-link">Voir sur Maps</a><br>';
 
 
                         if (d.blog !== "") {
-                            infos += '<a target="_blank" href="' + d.blog + '" class="card-link">Article du Blog</a>';
+                            getOpenGraph(d.blog,d);
+                            infos += '<a href="#" class="card-link" id="loadOpenGraphData">Paye ta Planche</a>';
+
+
                         }
 
-                        $('#infosBar').html(infos)
+                        infos += '</div>';
+
+
+                        $('#infosBar').html(infos);
+
 
 
                     });
+
 
                 function transform(d) {
                     d = new google.maps.LatLng(+d.latitude, +d.longitude);
@@ -840,6 +890,7 @@ d3.csv(URL, function (error, data) {
     var today = jour.getDay();
     var heure = jour.getHours();
     var minutes = jour.getMinutes() + 60 * heure;
+
 
     function colorizeBars2(key) {
 
